@@ -64,7 +64,7 @@ class ALSModelTrainerW2V2:
         return train_data_tensor, test_data_tensor, train_labels_tensor, test_labels_tensor
 
     def train_model(self, train_loader, test_loader, train_data_tensor, test_data_tensor, train_labels_tensor, test_labels_tensor,exp_name):
-        model = SimpleDNN_drop(train_data_tensor.shape[-1], num_classes=torch.unique(train_labels_tensor).shape[0])
+        model = SimpleDNN(train_data_tensor.shape[-1], num_classes=torch.unique(train_labels_tensor).shape[0])
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(model.parameters(), lr=3e-4)
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
