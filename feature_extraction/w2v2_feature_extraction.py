@@ -1,3 +1,7 @@
+from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2Model
+import torch
+import numpy as np
+
 class Wav2Vec2FeatureExtraction:
     def __init__(self, feature_extractor, model, device):
         self.feature_extractor = feature_extractor
