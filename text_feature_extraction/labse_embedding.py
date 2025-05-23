@@ -9,7 +9,8 @@ class LaBSE:
 
     def encode_pairs(self, sentence_pairs):
         flat_sentences = [sentence for pair in sentence_pairs for sentence in pair]
-        embeddings = torch.tensor(self.model.encode(flat_sentences)).reshape(len(sentence_pairs), 2, -1)
+        original_shape = np.array(sentence_pairs).shape
+        embeddings = torch.tensor(self.model.encode(flat_sentences)).reshape(original_shape[0],original_shape[1],-1)
         return embeddings, embeddings.mean(dim=1)
 
     def compute_similarities(self, sentence_pairs):
