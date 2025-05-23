@@ -41,7 +41,7 @@ def execute_feature_extraction(audio_file_paths, feature_extraction_method, save
 # Example usage
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--method', type=str, required=True, help="Feature extraction method: 'OpenSMILE' or 'W2V2'")      # W2V2 or OpenSMILE
+    parser.add_argument('--method', type=str, required=True, help="Feature extraction method: 'OpenSMILE' or 'W2V2'")
     parser.add_argument('--audio_path', type=str, required=True, help="path to audio files")  # path/*.wav
     parser.add_argument('--save_flag', type=str, default='False', help="Whether to save each feature vector")
     parser.add_argument('--save_dir', type=str, default='./features', help="Directory to save feature files")
