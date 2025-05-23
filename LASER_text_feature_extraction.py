@@ -4,8 +4,8 @@ import torch
 import pandas as pd
 import sys
 
-def execute_LaBSE_text_feature_extraction(csv_path, transcription_type='HSR', info_type='with image',
-                                    method='LaBSE', save=False, save_dir='./text_features'):
+def execute_LASER_text_feature_extraction(csv_path, transcription_type='HSR', info_type='with image',
+                                    method='LASER', save=False, save_dir='./text_features'):
 
     sys.path.append(os.path.abspath('.'))
 
