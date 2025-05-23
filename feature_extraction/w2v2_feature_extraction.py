@@ -38,7 +38,7 @@ class Wav2Vec2FeatureExtraction:
         duration = len(y) / sample_rate
         return waveform, sample_rate, y, duration
 
-    def global_feature_extraction(self, waveform, sample_rate):
+    def extract_features(self, waveform, sample_rate):
 
         """
         Extract features of audio signal using the pretrained model.
