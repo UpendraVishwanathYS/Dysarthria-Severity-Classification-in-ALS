@@ -17,7 +17,7 @@ def execute_LaBSE_text_feature_extraction(csv_path, transcription_type='HSR', in
     transcripts_dict = data.groupby('File_name')['Transcript'].apply(list).to_dict()
     sentence_pairs = list(transcripts_dict.values())
 
-    module = importlib.import_module('text_feature_extraction.labse_embeddings')
+    module = importlib.import_module('text_feature_extraction.labse_embedding')
     extractor_class = getattr(module, 'LaBSE')
 
     extractor = extractor_class()
