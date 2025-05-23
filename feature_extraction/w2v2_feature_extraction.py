@@ -1,5 +1,6 @@
 from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2Model
 import torch
+import torchaudio
 import numpy as np
 
 class Wav2Vec2FeatureExtraction:
