@@ -6,6 +6,7 @@ Comparison of Acoustic and Textual Features for Dysarthria Severity Classificati
 
 # Installing Dependencies
 To install dependencies, create a conda or virtual environment with Python 3 and then run ```pip install -r requirements.txt```
+</br> for LASER embedding based experiments: create a conda or virtual environment with Python 3 and then execute ```bash laser_installation.sh```.
 
 # Speech Feature Extraction
 Execution of the following command will extract speech embeddings and save them as .pt files for valid audio files in the specified path: ```python extract_speech_features.py --method "W2V2" --audio_path "/content/audio_data/*.wav" --save_flag True --save_dir "./saved_features"```
