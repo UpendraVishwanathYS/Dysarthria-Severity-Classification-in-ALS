@@ -1,2 +1,2 @@
-from .laser_embedding import LASER
-from .labse_embedding import LaBSE
+from .laser_embeddings import LASER
+from .labse_embeddings import LaBSE
