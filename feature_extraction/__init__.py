@@ -1,4 +1,2 @@
 from .opensmile_feature_extraction import OpenSmileFeatureExtractor
-from .labse_embeddings import LaBSE
-from .laser_embeddings import LASER
 from .w2v2_feature_extraction import Wav2Vec2FeatureExtraction
