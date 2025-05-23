@@ -1,7 +1,7 @@
 from utils.required_libraries import *
 
 class ALSModelTrainer:
-    def __init__(self, classification_type, exp_name, model_save_dir, log_dir, results_dir, model_fn, criterion_fn, optimizer_fn, lr, patience=5):
+    def __init__(self, classification_type, exp_name, model_save_dir, log_dir, results_dir, model_fn, criterion_fn, optimizer_fn, lr, epochs, patience=5):
         self.classification_type = classification_type
         self.exp_name = exp_name
         self.model_save_dir = model_save_dir
@@ -16,6 +16,7 @@ class ALSModelTrainer:
         self.best_val_f1 = 0.0
         self.early_stop_counter = 0
         self.writer = SummaryWriter(log_dir=os.path.join(log_dir, exp_name))
+        self.epochs = epochs
 
     def three_class_problem(self, labels):
         label_mapping = torch.tensor([0, 0, 1, 1, 2])
@@ -52,7 +53,7 @@ class ALSModelTrainer:
 
         return train_data_tensor, test_data_tensor, train_labels, test_labels
 
-    def train_model(self, train_loader, val_loader, model, criterion, optimizer, device, save_path, epochs=100):
+    def train_model(self, train_loader, val_loader, model, criterion, optimizer, device, save_path, epochs=epochs):
         model.to(device)
 
         for epoch in range(epochs):
