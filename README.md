@@ -16,7 +16,7 @@ parser.add_argument('--audio_path', type=str, required=True, help="path to audio
 parser.add_argument('--save_flag', type=str, default='False', help="Whether to save each feature vector")
 parser.add_argument('--save_dir', type=str, default='./features', help="Directory to save feature files")
 ```
-# Text Feature Extraction
+# Multilingual Sentence Embedding
 Execution of the following command will extract speech embeddings and save them as .pt files for the text transcriptions:
 (a) LaBSE: ```python LaBSE_extract_text_features.py --csv_path "hsr_transcripts.csv" --transcription_type HSR --info_type "with image" --save True --save_dir "./labse_features"```
 </br>(b) LASER: ```python LASER_extract_text_features.py --csv_path "hsr_transcripts.csv" --transcription_type HSR --info_type "with image" --save True --save_dir "./laser_features"```
