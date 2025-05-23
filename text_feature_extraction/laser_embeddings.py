@@ -11,8 +11,8 @@ class LASER:
         flat_sentences = [sentence for pair in sentence_pairs for sentence in pair]
 
         embeddings_np = self.model.embed_sentences(flat_sentences, lang=lang)
-
-        embeddings = torch.tensor(embeddings_np).reshape(len(sentence_pairs), 2, -1)
+        original_shape = np.array(sentence_pairs).shape
+        embeddings = torch.tensor(embeddings_np).reshape(original_shape[0],original_shape[1],-1)
 
         return embeddings, embeddings.mean(dim=1)
 
