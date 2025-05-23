@@ -11,7 +11,7 @@ def execute_LaBSE_text_feature_extraction(csv_path, transcription_type='HSR', in
 
     data = pd.read_csv(csv_path)
 
-    if info_type != 'all':
+    if info_type != 'all' and transcription_type == 'HSR':
         data = data[data['Type'] == info_type]
 
     transcripts_dict = data.groupby('File_name')['Transcript'].apply(list).to_dict()
@@ -40,9 +40,9 @@ if __name__ == "__main__":
 
     parser.add_argument('--csv_path',type=str,required=True,help='Path toCSV file containing transcription data')
 
-    parser.add_argument( '--transcription_type',type=str,default='HSR',help='Type of transcription to process (e.g., HSR)')
+    parser.add_argument( '--transcription_type',type=str,default='HSR',choices=['HSR','ASR'],help='Type of transcription to process (e.g., HSR)')
 
-    parser.add_argument('--info_type',type=str,default='with image',choices=['with image', 'without image', 'all'],help='Subset of transcripts to use: "with image", "without image", or "all"')
+    parser.add_argument('--info_type',type=str,default='all',choices=['with image', 'without image', 'all'],help='Subset of transcripts to use: "with image", "without image", or "all"')
 
     parser.add_argument('--save',type=str,default='False',choices=['True', 'False'],help='Whether to save the extracted features')
 
