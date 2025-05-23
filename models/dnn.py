@@ -40,3 +40,7 @@ class SimpleDNN(nn.Module):
         x = self.fc5(x)  # Raw logits (no softmax)
 
         return x
+
+
+def get_model(input_shape, num_classes):
+    return SimpleDNN(input_shape, num_classes)
