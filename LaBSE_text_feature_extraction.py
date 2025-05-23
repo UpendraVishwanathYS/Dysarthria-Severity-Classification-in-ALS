@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     parser.add_argument('--csv_path',type=str,required=True,help='Path toCSV file containing transcription data')
 
-    parser.add_argument( '--transcription_type',type=str,default='HSR',choices=['HSR','ASR'],help='Type of transcription to process (e.g., HSR)')
+    parser.add_argument( '--transcription_type',type=str,default='HSR',choices=['HSR','ASR'],help='Type of transcription')
 
     parser.add_argument('--info_type',type=str,default='all',choices=['with image', 'without image', 'all'],help='Subset of transcripts to use: "with image", "without image", or "all"')
 
