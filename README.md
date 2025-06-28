@@ -30,7 +30,7 @@ parser.add_argument('--save',type=str,default='False',choices=['True', 'False'],
 parser.add_argument('--save_dir',type=str,default='./text_features',help='Directory to save the features')
 ```
 Input CSV format for text feature extraction:
-| File_name       | Transcript                          | Type        | Severity | subject      |
+| File_name       | Transcript                          | Type        | Severity | Subject      |
 |------------------|--------------------------------------|-------------|----------|--------------|
 | subjectnumber_001.wav | {CLICK} মাছ {PAUSE} রেডি আছে        | with image  | 3        | subjectnumber  |
 
