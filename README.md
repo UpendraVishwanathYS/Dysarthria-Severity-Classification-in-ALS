@@ -32,7 +32,7 @@ parser.add_argument('--save_dir',type=str,default='./text_features',help='Direct
 Input CSV format for text feature extraction:
 | File_name       | Transcript                          | Type        | Severity | subject      |
 |------------------|--------------------------------------|-------------|----------|--------------|
-| subject_001.wav | {CLICK} মাছ {PAUSE} রেডি আছে        | with image  | 3        | subject_001  |
+| subjectnumber_001.wav | {CLICK} মাছ {PAUSE} রেডি আছে        | with image  | 3        | subjectnumber  |
 
 
 # Training Classification Model:
