@@ -26,25 +26,40 @@ import laserembeddings
 
 import importlib
 
-def load_fold_data(fold_name, data_dir, train_xlsx, test_xlsx):
+def load_fold_data(fold_name, data_dir, train_xlsx, test_xlsx, val_subjects_count=2, seed=42):
     train_df = pd.read_excel(train_xlsx, sheet_name=fold_name)
     test_df = pd.read_excel(test_xlsx, sheet_name=fold_name)
+
+    if 'Subject' not in train_df.columns:
+        train_df['Subject'] = train_df['File_name'].apply(lambda x: os.path.basename(x).split('.')[0])
+
+    unique_subjects = train_df['Subject'].unique()
+    random.seed(seed)
+    val_subjects = random.sample(list(unique_subjects), val_subjects_count)
+
+    val_df = train_df[train_df['Subject'].isin(val_subjects)]
+    train_df = train_df[~train_df['Subject'].isin(val_subjects)]
 
     def load_tensor_list(file_names):
         return [torch.load(os.path.join(data_dir, f)) for f in file_names]
 
-    train_data = load_tensor_list(train_df['data'])
-    train_labels = load_tensor_list(train_df['label'])
-    test_data = load_tensor_list(test_df['data'])
-    test_labels = load_tensor_list(test_df['label'])
+    train_data = load_tensor_list(train_df['File_name'])
+    train_labels = load_tensor_list(train_df['Severity'])
 
-    # Stack if they are stored individually
+    test_data = load_tensor_list(test_df['File_name'])
+    test_labels = load_tensor_list(test_df['Severity'])
+
+    val_data = load_tensor_list(val_df['File_name'])
+    val_labels = load_tensor_list(val_df['Severity'])
+
     train_data_tensor = torch.cat(train_data)
     train_labels_tensor = torch.cat(train_labels)
     test_data_tensor = torch.cat(test_data)
     test_labels_tensor = torch.cat(test_labels)
+    val_data_tensor = torch.cat(val_data)
+    val_labels_tensor = torch.cat(val_labels)
 
-    return train_data_tensor, test_data_tensor, train_labels_tensor, test_labels_tensor
+    return train_data_tensor, test_data_tensor, val_data_tensor, train_labels_tensor, test_labels_tensor, val_labels_tensor
 
 
 def load_classification_model(model_type: str, input_shape: int, num_classes: int):
