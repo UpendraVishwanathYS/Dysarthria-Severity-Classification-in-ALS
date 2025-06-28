@@ -128,35 +128,50 @@ class ALSModelTrainer:
         return model.to(device)
 
     def run(self, data_splits):
-        for i, (train_data_tensor, test_data_tensor, train_labels_tensor, test_labels_tensor) in enumerate(sorted(data_splits.keys())):
+        for i, (train_data_tensor, test_data_tensor, val_data_tensor, train_labels_tensor, test_labels_tensor, val_labels_tensor) in enumerate(sorted(data_splits.keys())):
             exp_name = f'{self.exp_name}_Combination{i}'
+    
             train_data_tensor, test_data_tensor, train_labels_tensor, test_labels_tensor = self.process_data(
                 train_data_tensor, test_data_tensor, train_labels_tensor, test_labels_tensor
             )
-
+            _, val_data_tensor, _, val_labels_tensor = self.process_data(
+                train_data_tensor, val_data_tensor, train_labels_tensor, val_labels_tensor
+            )
+    
             train_loader = DataLoader(TensorDataset(train_data_tensor, train_labels_tensor), batch_size=32, shuffle=True)
+            val_loader = DataLoader(TensorDataset(val_data_tensor, val_labels_tensor), batch_size=32, shuffle=False)
             test_loader = DataLoader(TensorDataset(test_data_tensor, test_labels_tensor), batch_size=32, shuffle=False)
-
+    
             model = self.model_fn(input_shape=train_data_tensor.shape[-1], num_classes=torch.unique(train_labels_tensor).shape[0])
             criterion = self.criterion_fn()
             optimizer = self.optimizer_fn(model.parameters(), lr=self.lr)
             device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
+    
             save_path = f'{self.model_save_dir}/{exp_name}_best_model.pth'
-            model = self.train_model(train_loader, test_loader, model, criterion, optimizer, device, save_path)
-            metrics = self.evaluate_model(model, test_loader, device)
-
-            self.fold_metrics.append({'Fold': i, 'Accuracy': accuracy_score(test_labels_tensor, torch.argmax(model(test_data_tensor.to(device)), dim=1).cpu()), **{
-                'F1 Score': metrics,
-                'Precision': precision_score(test_labels_tensor, torch.argmax(model(test_data_tensor.to(device)), dim=1).cpu(), average='macro'),
-                'Recall': recall_score(test_labels_tensor, torch.argmax(model(test_data_tensor.to(device)), dim=1).cpu(), average='macro')
-            }})
-
-            print(f'Combinations:{i}')
-            print(", ".join([f'{k}: {v:.2f}' for k, v in self.fold_metrics[-1].items() if k != 'Fold']))
-
+            model = self.train_model(train_loader, val_loader, model, criterion, optimizer, device, save_path)
+    
+            model.eval()
+            all_labels = []
+            all_preds = []
+            with torch.no_grad():
+                for inputs, labels in test_loader:
+                    inputs = inputs.to(device)
+                    outputs = model(inputs)
+                    _, predicted = torch.max(outputs, 1)
+                    all_labels.extend(labels.numpy())
+                    all_preds.extend(predicted.cpu().numpy())
+    
+            acc = accuracy_score(all_labels, all_preds)
+            f1 = f1_score(all_labels, all_preds, average='macro')
+            prec = precision_score(all_labels, all_preds, average='macro')
+            rec = recall_score(all_labels, all_preds, average='macro')
+    
+            self.fold_metrics.append({'Fold': i, 'Accuracy': acc, 'F1 Score': f1, 'Precision': prec, 'Recall': rec})
+            print(f'Combination {i} - Accuracy: {acc:.2f}, F1: {f1:.2f}, Precision: {prec:.2f}, Recall: {rec:.2f}')
+    
         metrics_df = pd.DataFrame(self.fold_metrics)
         self.print_average_metrics(metrics_df)
+
 
     def print_average_metrics(self, metrics_df):
         summary = {}
